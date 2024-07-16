@@ -3,6 +3,7 @@
 const request = require('postman-request');
 const config = require('./config/config');
 const async = require('async');
+const _ = require('lodash');
 const fs = require('fs');
 
 let Logger;
@@ -47,7 +48,8 @@ function doLookup(entities, options, cb) {
   let lookupResults = [];
   let tasks = [];
 
-  Logger.debug(entities);
+  Logger.debug({ entities }, 'doLookup');
+
   entities.forEach((entity) => {
     const url = `https://app.snapattack.com/api/tags`;
 
@@ -61,7 +63,7 @@ function doLookup(entities, options, cb) {
       json: true
     };
 
-    if (entity.type === 'cve') {
+    if (entity.types.includes('cve')) {
       requestOptions.uri = url + '/vulnerabilities/' + entity.value + '/landing';
     } else if (options.lookups.value.includes('threatActors')) {
       requestOptions.uri = url + '/actors/' + entity.value + '/landing';
@@ -106,15 +108,10 @@ function doLookup(entities, options, cb) {
           data: null
         });
       } else {
-        let summary = [];
-        if (result.body.combined.description) {
-          summary.push(result.body.combined.description);
-        }
-
         lookupResults.push({
           entity: result.entity,
           data: {
-            summary: summary,
+            summary: getSummaryTags(result.entity, result.body),
             details: result.body.combined
           }
         });
@@ -124,6 +121,17 @@ function doLookup(entities, options, cb) {
     Logger.debug({ lookupResults }, 'Results');
     cb(null, lookupResults);
   });
+}
+
+function getSummaryTags(entity, body) {
+  const tags = [];
+  if (entity.types.includes('cve')) {
+    tags.push(`CVSS Score: ${_.get(body, 'combined.cvss_3_vector_details.base_score', 'N/A')}`);
+    tags.push(`Vector: ${_.get(body, 'combined.cvss_3_vector_details.modified_attack_vector', 'N/A')}`);
+  } else if (body && body.combined && body.combined.description) {
+    tags.push(body.combined.description);
+  }
+  return tags;
 }
 
 function handleRestError(error, entity, res, body) {

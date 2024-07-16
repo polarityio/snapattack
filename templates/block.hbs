@@ -11,9 +11,11 @@
 <div id="snapattack-container-{{uniqueIdPrefix}}">
   <div class="mb-1">
     <div class="mb-2">
-      <a class="p-link" href="https://app.snapattack.com">Pivot to SnapAttack
-        {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
-      </a>
+      {{#if (includes "cve" block.entity.types)}}
+        <a class="p-link" href="https://app.snapattack.com/collection/vulnerability/{{block.entity.value}}">View in SnapAttack
+          {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
+        </a>
+      {{/if}}
     </div>
     {{#if details.description}}
       <div>
@@ -22,25 +24,53 @@
     {{/if}}
   </div>
 
+  {{#if details.creation}}
+    <div>
+      <span class="p-key">Created:</span>
+      <span class="p-value">{{moment-format details.creation 'MM/DD/YYYY HH:mm:ss' timeZone=timezone}}</span>
+    </div>
+  {{/if}}
+
+  {{#if details.cisa_known_exploited_date}}
+    <div>
+      <span class="p-key">CISA Known Exploited Date:</span>
+      <span class="p-value">{{moment-format details.cisa_known_exploited_date 'MM/DD/YYYY HH:mm:ss' timeZone=timezone}}</span>
+    </div>
+  {{/if}}
+
+  {{#if (or (eq details.observed_in_the_wild true)(eq observed_in_the_wild false))}}
+    <div>
+      <span class="p-key">Observed in Wild:</span>
+      <span class="p-value">{{details.observed_in_the_wild}}</span>
+    </div>
+  {{/if}}
+
+  {{#if details.epss_score}}
+    <div>
+      <span class="p-key">EPSS Score:</span>
+      <span class="p-value">{{details.epss_score}}</span>
+    </div>
+  {{/if}}
+
   {{#if details.first_seen}}
    <div>
       <span class="p-key">First Observed:</span>
-      <span class="p-value">{{details.first_seen}}</span>
+      <span class="p-value">{{moment-format details.first_seen 'MM/DD/YYYY HH:mm:ss' timeZone=timezone}}</span>
    </div>
   {{/if}}
 
   {{#if details.last_seen}}
    <div>
       <span class="p-key">Last Observed:</span>
-      <span class="p-value">{{details.last_seen}}</span>
+      <span class="p-value">{{moment-format details.last_seen 'MM/DD/YYYY HH:mm:ss' timeZone=timezone}}</span>
    </div>
   {{/if}}
 
-  {{#if details.cisa_known_exploited_date}}
-   <div>
-      <span class="p-key">CISA Known Exploited Date:</span>
-      <span class="p-value">{{details.cisa_known_exploited_date}}</span>
-   </div>
+  {{#if details.workarounds}}
+    <h1 class="p-title">{{fa-icon icon="wrench" fixedWidth=true}} Recommended Workarounds</h1>
+    {{#each details.workarounds as |work|}}
+      <span class="p-value p-block">{{work}}</span>
+    {{/each}}
   {{/if}}
 
   {{#if details.motivations}}
@@ -50,16 +80,8 @@
     {{/each}}
   {{/if}}
 
-  {{#if details.workarounds}}
-    <h1 class="p-title">{{fa-icon icon="breifcase" fixedWidth=true}} Recommended Workarounds</h1>
-    {{#each details.workarounds as |work|}}
-        <span class="p-value p-block">{{work}}</span>
-    {{/each}}
-  {{/if}}
-
-
   {{#if details.resolutions}}
-    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Parents</h1>
+    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Resolutions</h1>
     {{#each details.resolutions as |res|}}
       <span class="tag">{{res}}</span>
     {{/each}}
@@ -79,24 +101,92 @@
     </div>
   {{/if}}
 
-  {{#if details.cvss_3_vector_details.availability_impact}}
-    <div>
-      <span class="p-key">CVSS 3 Impact:</span>
-      <span class="p-value">{{details.cvss_3_vector_details.availability_impact}}</span>
+  {{#if details.cvss_3_vector_details}}
+    <h1 class="p-title">{{fa-icon icon="star" fixedWidth=true}} CVSS Scores</h1>
+    <div class="info-bar mb-1">
+      <div class="info-bar-row">
+        <div class="info-bar-pill">
+          <span class="info-bar-key">Base</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.base_score}}{{details.cvss_3_vector_details.base_score}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+        <div class="info-bar-pill">
+          <span class="info-bar-key">Temporal</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.temporal_score}}{{details.cvss_3_vector_details.temporal_score}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+        <div class="info-bar-pill">
+          <span class="info-bar-key">Environmental</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.environmental_score}}{{details.cvss_3_vector_details.environmental_score}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+      </div>
     </div>
-  {{/if}}
 
-  {{#if details.cvss_3_vector_details.base_score}}
-    <div>
-      <span class="p-key">CVSS 3 Base and Environmental Score:</span>
-      <span class="p-value">Base Score: {{details.cvss_3_vector_details.base_score}}, Environmental Score: {{details.cvss_3_vector_details.environmental_score}}</span>
+    <h1 class="p-title">{{fa-icon icon="claw-marks" fixedWidth=true}} CVSS Exploitability (Modified)</h1>
+    <div class="info-bar mb-1">
+      <div class="info-bar-row">
+        <div class="info-bar-pill two-wide">
+          <span class="info-bar-key">Attack Vector</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.modified_attack_vector}}{{details.cvss_3_vector_details.modified_attack_vector}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+        <div class="info-bar-pill two-wide">
+          <span class="info-bar-key">Complexity</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.modified_attack_complexity}}{{details.cvss_3_vector_details.modified_attack_complexity}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+      </div>
+      <div class="info-bar-row">
+        <div class="info-bar-pill two-wide">
+          <span class="info-bar-key">Privileges Req'd</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.modified_privileges_required}}{{details.cvss_3_vector_details.modified_privileges_required}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+        <div class="info-bar-pill two-wide">
+          <span class="info-bar-key">User Interaction</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.modified_user_interaction}}{{details.cvss_3_vector_details.modified_user_interaction}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="p-title">{{fa-icon icon="hammer" fixedWidth=true}} CVSS Impacts (Modified)</h1>
+    <div class="info-bar mb-1">
+      <div class="info-bar-row">
+        <div class="info-bar-pill">
+          <span class="info-bar-key">Confidentiality</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.modified_confidentiality_impact}}{{details.cvss_3_vector_details.modified_confidentiality_impact}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+        <div class="info-bar-pill">
+          <span class="info-bar-key">Integrity</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.modified_integrity_impact}}{{details.cvss_3_vector_details.modified_integrity_impact}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+        <div class="info-bar-pill">
+          <span class="info-bar-key">Availability</span>
+          <span class="info-bar-value">
+            {{#if details.cvss_3_vector_details.modified_availability_impact}}{{details.cvss_3_vector_details.modified_availability_impact}}{{else}}N/A{{/if}}
+          </span>
+        </div>
+      </div>
     </div>
   {{/if}}
 
   {{#if details.available_mitigation}}
-    <h1 class="p-title">{{fa-icon icon="stop" fixedWidth=true}} Known Mitigations</h1>
+    <h1 class="p-title">{{fa-icon icon="stop" fixedWidth=true}} Available Mitigations</h1>
     {{#each details.available_mitigation as |mit|}}
-      <span class="p-value p-block">{{mit}}</span>
+      <span class="tag">{{mit}}</span>
     {{/each}}
   {{/if}}
 
@@ -167,7 +257,7 @@
   {{/if}}
 
   {{#if details.actors}}
-    <h1 class="p-title">{{fa-icon icon="credit-card" fixedWidth=true}} Known Threat Actors</h1>
+    <h1 class="p-title">{{fa-icon icon="user-secret" fixedWidth=true}} Known Threat Actors</h1>
     {{#each details.actors as |actor|}}
       <span class="tag">{{actor.name}}</span>
     {{/each}}
