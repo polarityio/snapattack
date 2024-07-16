@@ -8,234 +8,193 @@
   </div>
 </div>
 
-
-<div class="mb-1">
-      <div class="mb-2">
-        <a class="p-link" href="https://app.snapattack.com">Pivot to SnapAttack
-          {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
-        </a>
-      </div>
-      {{#if details.description}}
+<div id="snapattack-container-{{uniqueIdPrefix}}">
+  <div class="mb-1">
+    <div class="mb-2">
+      <a class="p-link" href="https://app.snapattack.com">Pivot to SnapAttack
+        {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
+      </a>
+    </div>
+    {{#if details.description}}
       <div>
-        <span class="p-value p-block">{{details.description}}</span> 
+        <span class="p-value p-block">{{details.description}}</span>
       </div>
-      {{/if}}
-</div>
+    {{/if}}
+  </div>
 
-{{#if details.first_seen}}
- <div>
-      <span class="p-key">First Observerd:</span>
+  {{#if details.first_seen}}
+   <div>
+      <span class="p-key">First Observed:</span>
       <span class="p-value">{{details.first_seen}}</span>
-    </div>
-{{/if}}
-{{#if details.last_seen}}
- <div>
-      <span class="p-key">Last Observerd:</span>
-      <span class="p-value">{{details.last_seen}}</span>
-    </div>
-{{/if}}
+   </div>
+  {{/if}}
 
-{{#if details.cisa_known_exploited_date}}
- <div>
+  {{#if details.last_seen}}
+   <div>
+      <span class="p-key">Last Observed:</span>
+      <span class="p-value">{{details.last_seen}}</span>
+   </div>
+  {{/if}}
+
+  {{#if details.cisa_known_exploited_date}}
+   <div>
       <span class="p-key">CISA Known Exploited Date:</span>
       <span class="p-value">{{details.cisa_known_exploited_date}}</span>
-    </div>
-{{/if}}
+   </div>
+  {{/if}}
 
-
-<div>
-{{#if details.motivations}}
-<div class="p-title">{{fa-icon icon="question" fixedWidth=true}} Motivations</div>
-{{#each details.motivations as |motive|}}
+  {{#if details.motivations}}
+    <h1 class="p-title">{{fa-icon icon="question" fixedWidth=true}} Motivations</h1>
+    {{#each details.motivations as |motive|}}
         <span class="tag">{{motive}}</span>
-{{/each}}
-{{/if}}
-</div>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.workarounds}}
-<div class="p-title">{{fa-icon icon="breifcase" fixedWidth=true}} Recommended Workarounds</div>
-{{#each details.workarounds as |work|}}
-        <span class="p-value p-block">{{work}}</span> 
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.workarounds}}
+    <h1 class="p-title">{{fa-icon icon="breifcase" fixedWidth=true}} Recommended Workarounds</h1>
+    {{#each details.workarounds as |work|}}
+        <span class="p-value p-block">{{work}}</span>
+    {{/each}}
+  {{/if}}
 
 
-<div>
-{{#if details.resolutions}}
-<div class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Parents</div>
-{{#each details.resolutions as |res|}}
-        <span class="tag">{{res}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.resolutions}}
+    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Parents</h1>
+    {{#each details.resolutions as |res|}}
+      <span class="tag">{{res}}</span>
+    {{/each}}
+  {{/if}}
 
-{{#if details.severity}}
- <div>
+  {{#if details.severity}}
+   <div>
       <span class="p-key">Severity:</span>
       <span class="p-value">{{details.severity}}</span>
-    </div>
-{{/if}}
+   </div>
+  {{/if}}
 
-
- <div>
-{{#if details.cvss_3_vector}}
+  {{#if details.cvss_3_vector}}
+    <div>
       <span class="p-key">CVSS 3 Vector:</span>
       <span class="p-value">{{details.cvss_3_vector}}</span>
-{{/if}}
     </div>
+  {{/if}}
 
-
- <div>
-    {{#if details.cvss_3_vector_details.availability_impact}}
+  {{#if details.cvss_3_vector_details.availability_impact}}
+    <div>
       <span class="p-key">CVSS 3 Impact:</span>
       <span class="p-value">{{details.cvss_3_vector_details.availability_impact}}</span>
-    {{/if}}  
-</div>
+    </div>
+  {{/if}}
 
-
- <div>
-    {{#if details.cvss_3_vector_details.base_score}}
+  {{#if details.cvss_3_vector_details.base_score}}
+    <div>
       <span class="p-key">CVSS 3 Base and Environmental Score:</span>
       <span class="p-value">Base Score: {{details.cvss_3_vector_details.base_score}}, Environmental Score: {{details.cvss_3_vector_details.environmental_score}}</span>
-    {{/if}}
     </div>
+  {{/if}}
 
-<div>
-{{#if details.available_mitigation}}
-<div class="p-title">{{fa-icon icon="stop" fixedWidth=true}} Known Mitigations</div>
-{{#each details.available_mitigation as |mit|}}
-        <span class="p-value p-block">{{mit}}</span> 
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.available_mitigation}}
+    <h1 class="p-title">{{fa-icon icon="stop" fixedWidth=true}} Known Mitigations</h1>
+    {{#each details.available_mitigation as |mit|}}
+      <span class="p-value p-block">{{mit}}</span>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.platforms}}
-<div class="p-title">{{fa-icon icon="breifcase" fixedWidth=true}} Associated Platforms</div>
-{{#each details.platforms as |plat|}}
-        <span class="p-value p-block">{{plat}}</span> 
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.platforms}}
+    <h1 class="p-title">{{fa-icon icon="breifcase" fixedWidth=true}} Associated Platforms</h1>
+    {{#each details.platforms as |plat|}}
+      <span class="p-value p-block">{{plat}}</span>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.parents}}
-<div class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Parents</div>
-{{#each details.parents as |parent|}}
-        <span class="tag">{{parent.external_source_id}}: {{parent.name}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.parents}}
+    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Parents</h1>
+    {{#each details.parents as |parent|}}
+      <span class="tag">{{parent.external_source_id}}: {{parent.name}}</span>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.children}}
-<div class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Children</div>
-{{#each details.children as |child|}}
-        <span class="tag">{{child.external_source_id}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.children}}
+    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Children</h1>
+    {{#each details.children as |child|}}
+      <span class="tag">{{child.external_source_id}}</span>
+    {{/each}}
+  {{/if}}
 
+  {{#if details.aliases}}
+    <h1 class="p-title">{{fa-icon icon="user" fixedWidth=true}} Known Aliases</h1>
+    {{#each details.aliases as |alias|}}
+      <span class="tag">{{alias}}</span>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.aliases}}
-<div class="p-title">{{fa-icon icon="user" fixedWidth=true}} Known Aliases</div>
-{{#each details.aliases as |alias|}}
-        <span class="tag">{{alias}}</span>
-{{/each}}
-{{/if}}
-</div>
-
-<div>
-{{#if details.attacks}}
-<div class="p-title">{{fa-icon icon="mace" fixedWidth=true}} Number of Associated Attack Scripts: {{details.attacks.length}}</div>
-{{/if}}
-</div>
-
-<div>
-{{#if details.exploits}}
-<div class="p-title">{{fa-icon icon="spider" fixedWidth=true}} Number of Known Exploits: {{details.exploits.length}}</div>
-{{/if}}
-</div>
+  {{#if details.attacks}}
+    <h1 class="p-title">{{fa-icon icon="mace" fixedWidth=true}} Number of Associated Attack Scripts: {{details.attacks.length}}</h1>
+  {{/if}}
 
 
-<div>
-{{#if details.vulnerabilities}}
-<div class="p-title">{{fa-icon icon="bug" fixedWidth=true}} Associated Vulnerabilities</div>
-{{#each details.vulnerabilities as |vuln|}}
-        <span class="tag">{{vuln.name}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.exploits}}
+    <h1 class="p-title">{{fa-icon icon="spider" fixedWidth=true}} Number of Known Exploits: {{details.exploits.length}}</h1>
+  {{/if}}
+
+  {{#if details.vulnerabilities}}
+    <h1 class="p-title">{{fa-icon icon="bug" fixedWidth=true}} Associated Vulnerabilities</h1>
+    {{#each details.vulnerabilities as |vuln|}}
+      <span class="tag">{{vuln.name}}</span>
+    {{/each}}
+  {{/if}}
 
 
-<div>
-{{#if details.source_regions}}
-<div class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known Source Regions</div>
-{{#each details.source_regions as |source|}}
-        <span class="tag">{{source}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.source_regions}}
+    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known Source Regions</h1>
+    {{#each details.source_regions as |source|}}
+            <span class="tag">{{source}}</span>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.target_regions}}
-<div class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known Target Regions</div>
-{{#each details.target_regions as |target|}}
-        <span class="tag">{{target}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.target_regions}}
+    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known Target Regions</h1>
+    {{#each details.target_regions as |target|}}
+      <span class="tag">{{target}}</span>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.industries}}
-<div class="p-title">{{fa-icon icon="industry" fixedWidth=true}} Targeted Industries</div>
-{{#each details.industries as |ind|}}
-        <span class="tag">{{ind.name}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.industries}}
+    <h1 class="p-title">{{fa-icon icon="industry" fixedWidth=true}} Targeted Industries</h1>
+    {{#each details.industries as |ind|}}
+      <span class="tag">{{ind.name}}</span>
+    {{/each}}
+  {{/if}}
 
-<div> 
-{{#if details.actors}}
-<div class="p-title">{{fa-icon icon="credit-card" fixedWidth=true}} Known Threat Actors</div>
-{{#each details.actors as |actor|}}
-        <span class="tag">{{actor.name}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.actors}}
+    <h1 class="p-title">{{fa-icon icon="credit-card" fixedWidth=true}} Known Threat Actors</h1>
+    {{#each details.actors as |actor|}}
+      <span class="tag">{{actor.name}}</span>
+    {{/each}}
+  {{/if}}
 
-<div> 
-{{#if details.vulnerable_cpes}}
-<div class="p-title">{{fa-icon icon="industry" fixedWidth=true}} Vulnerable CPEs</div>
-{{#each details.vulnerable_cpes as |cpe|}}
-        <span class="tag">{{cpe.cpe_title}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.vulnerable_cpes}}
+    <h1 class="p-title">{{fa-icon icon="industry" fixedWidth=true}} Vulnerable CPEs</h1>
+    {{#each details.vulnerable_cpes as |cpe|}}
+      <span class="tag">{{cpe.cpe_title}}</span>
+    {{/each}}
+  {{/if}}
 
-<div> 
-{{#if details.vendors}}
-<div class="p-title">{{fa-icon icon="credit-card" fixedWidth=true}} Vendors</div>
-{{#each details.vendors as |vendor|}}
-        <span class="tag">{{vendor}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.vendors}}
+    <h1 class="p-title">{{fa-icon icon="credit-card" fixedWidth=true}} Vendors</h1>
+    {{#each details.vendors as |vendor|}}
+      <span class="tag">{{vendor}}</span>
+    {{/each}}
+  {{/if}}
 
-<div> 
-{{#if details.products}}
-<div class="p-title">{{fa-icon icon="clipboard" fixedWidth=true}} Products</div>
-{{#each details.products as |prod|}}
-        <span class="tag">{{prod}}</span>
-{{/each}}
-{{/if}}
-</div>
+  {{#if details.products}}
+    <h1 class="p-title">{{fa-icon icon="clipboard" fixedWidth=true}} Products</h1>
+    {{#each details.products as |prod|}}
+      <span class="tag">{{prod}}</span>
+    {{/each}}
+  {{/if}}
 
-<div>
-{{#if details.software}}
-<div class="p-title">{{fa-icon icon="starship" fixedWidth=true}} Number of Associated Sofware: {{details.software.length}}</div>
-{{/if}}
+  {{#if details.software}}
+    <div class="p-title">{{fa-icon icon="starship" fixedWidth=true}} Number of Associated Software: {{details.software.length}}</div>
+  {{/if}}
 </div>

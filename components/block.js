@@ -4,6 +4,7 @@ polarity.export = PolarityComponent.extend({
   timezone: Ember.computed('Intl', function () {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   }),
+  showCopyMessage: false,
   init: function () {
     let array = new Uint32Array(5);
     this.set('uniqueIdPrefix', window.crypto.getRandomValues(array).join(''));
@@ -16,7 +17,7 @@ polarity.export = PolarityComponent.extend({
         'afterRender',
         this,
         this.copyElementToClipboard,
-        `lolbas-container-${this.get('uniqueIdPrefix')}`
+        `snapattack-container-${this.get('uniqueIdPrefix')}`
       );
 
       Ember.run.scheduleOnce('destroy', this, this.restoreCopyState);

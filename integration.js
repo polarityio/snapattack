@@ -51,18 +51,15 @@ function doLookup(entities, options, cb) {
   entities.forEach((entity) => {
     const url = `https://app.snapattack.com/api/tags`;
 
-  
     let requestOptions = {
       method: 'GET',
       uri: url,
       headers: {
-       'X-API-KEY': options.apiKey,
-       Accept: 'application/json'
+        'X-API-KEY': options.apiKey,
+        Accept: 'application/json'
       },
       json: true
     };
-
-    Logger.trace(requestOptions);
 
     if (entity.type === 'cve') {
       requestOptions.uri = url + '/vulnerabilities/' + entity.value + '/landing';
@@ -70,15 +67,18 @@ function doLookup(entities, options, cb) {
       requestOptions.uri = url + '/actors/' + entity.value + '/landing';
     } else if (options.lookups.value.includes('mitre')) {
       requestOptions.uri = url + '/attacks/' + entity.value + '/landing';
-    }else {
-      cb({ detail: 'Unknown entity type received', err: new Error('Unknown lookup, please check your lookup options') });
+    } else {
+      cb({
+        detail: 'Unknown entity type received',
+        err: new Error('Unknown lookup, please check your lookup options')
+      });
       return;
     }
 
     Logger.trace({ requestOptions }, 'Request Options');
 
-    tasks.push(function(done) {
-      requestWithDefaults(requestOptions, function(error, res, body) {
+    tasks.push(function (done) {
+      requestWithDefaults(requestOptions, function (error, res, body) {
         Logger.trace({ body, status: res.statusCode });
         let processedResult = handleRestError(error, entity, res, body);
 
@@ -101,15 +101,14 @@ function doLookup(entities, options, cb) {
 
     results.forEach((result) => {
       if (result.body === null) {
-        
         lookupResults.push({
           entity: result.entity,
           data: null
         });
       } else {
         let summary = [];
-        if(result.body.combined.description){
-          summary.push(result.body.combined.description); 
+        if (result.body.combined.description) {
+          summary.push(result.body.combined.description);
         }
 
         lookupResults.push({
@@ -138,10 +137,10 @@ function handleRestError(error, entity, res, body) {
     };
   }
 
-  if (res.statusCode === 404){
+  if (res.statusCode === 404) {
     return {
       entity: entity,
-      body: null,
+      body: null
     };
   }
 
@@ -150,11 +149,11 @@ function handleRestError(error, entity, res, body) {
       error: 'Did not receive HTTP 200 Status Code',
       statusCode: res ? res.statusCode : 'Unknown',
       detail: 'An unexpected error occurred',
-      body, 
+      body,
       res
     };
   }
-  
+
   if (res.statusCode === 200) {
     // we got data!
     result = {
@@ -172,15 +171,15 @@ function handleRestError(error, entity, res, body) {
 
   return result;
 }
+
 function validateStringOption(errors, options, optionName, errMessage) {
   if (
-    typeof options[optionName].value !== "string" ||
-    (typeof options[optionName].value === "string" &&
-      options[optionName].value.length === 0)
+    typeof options[optionName].value !== 'string' ||
+    (typeof options[optionName].value === 'string' && options[optionName].value.length === 0)
   ) {
     errors.push({
       key: optionName,
-      message: errMessage,
+      message: errMessage
     });
   }
 }
@@ -188,12 +187,7 @@ function validateStringOption(errors, options, optionName, errMessage) {
 function validateOptions(options, callback) {
   let errors = [];
 
-  validateStringOption(
-    errors,
-    options,
-    "apiKey",
-    "You must provide a valid API Key"
-  );
+  validateStringOption(errors, options, 'apiKey', 'You must provide a valid API Key');
   callback(null, errors);
 }
 
