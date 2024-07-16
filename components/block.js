@@ -1,6 +1,7 @@
 'use strict';
 polarity.export = PolarityComponent.extend({
-  details: Ember.computed.alias('block.data.details'),
+  details: Ember.computed.alias('block.data.details.data'),
+  lookupType: Ember.computed.alias('block.data.details.lookupType'),
   timezone: Ember.computed('Intl', function () {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   }),

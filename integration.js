@@ -48,7 +48,7 @@ function doLookup(entities, options, cb) {
   let lookupResults = [];
   let tasks = [];
 
-  Logger.debug({ entities }, 'doLookup');
+  Logger.trace({ entities }, 'doLookup');
 
   entities.forEach((entity) => {
     const url = `https://app.snapattack.com/api/tags`;
@@ -63,11 +63,13 @@ function doLookup(entities, options, cb) {
       json: true
     };
 
-    if (entity.types.includes('cve')) {
+    const lookupType = getLookupType(entity, options);
+
+    if (lookupType === 'cve') {
       requestOptions.uri = url + '/vulnerabilities/' + entity.value + '/landing';
-    } else if (options.lookups.value.includes('threatActors')) {
+    } else if (lookupType === 'threatActors') {
       requestOptions.uri = url + '/actors/' + entity.value + '/landing';
-    } else if (options.lookups.value.includes('mitre')) {
+    } else if (lookupType === 'mitre') {
       requestOptions.uri = url + '/attacks/' + entity.value + '/landing';
     } else {
       cb({
@@ -108,11 +110,15 @@ function doLookup(entities, options, cb) {
           data: null
         });
       } else {
+        const lookupType = getLookupType(result.entity, options);
         lookupResults.push({
           entity: result.entity,
           data: {
-            summary: getSummaryTags(result.entity, result.body),
-            details: result.body.combined
+            summary: getSummaryTags(lookupType, result.body),
+            details: {
+              lookupType,
+              data: result.body.combined
+            }
           }
         });
       }
@@ -123,13 +129,29 @@ function doLookup(entities, options, cb) {
   });
 }
 
-function getSummaryTags(entity, body) {
-  const tags = [];
+function getLookupType(entity, options) {
   if (entity.types.includes('cve')) {
+    return 'cve';
+  } else if (options.lookups.value === 'threatActors') {
+    return 'threatActors';
+  } else {
+    return 'mitre';
+  }
+}
+
+function getSummaryTags(lookupType, body) {
+  const tags = [];
+  if (lookupType === 'cve') {
     tags.push(`CVSS Score: ${_.get(body, 'combined.cvss_3_vector_details.base_score', 'N/A')}`);
-    tags.push(`Vector: ${_.get(body, 'combined.cvss_3_vector_details.modified_attack_vector', 'N/A')}`);
-  } else if (body && body.combined && body.combined.description) {
-    tags.push(body.combined.description);
+    tags.push(
+      `Vector: ${_.get(body, 'combined.cvss_3_vector_details.modified_attack_vector', 'N/A')}`
+    );
+  } else if (lookupType === 'threatActors') {
+    tags.push(`Tracked Vulns: ${_.get(body, 'combined.vulnerabilities.length', 0)}`);
+    tags.push(`Industries: ${_.get(body, 'combined.industries.length', 0)}`);
+  } else {
+    tags.push(`Threat Actors: ${_.get(body, 'combined.actors.length', 0)}`);
+    tags.push(`Severity: ${_.get(body, 'combined.severity', 0)}`);
   }
   return tags;
 }

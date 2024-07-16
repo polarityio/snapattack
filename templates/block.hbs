@@ -8,22 +8,31 @@
   </div>
 </div>
 
-<div id="snapattack-container-{{uniqueIdPrefix}}">
-  <div class="mb-1">
-    <div class="mb-2">
-      {{#if (includes "cve" block.entity.types)}}
-        <a class="p-link" href="https://app.snapattack.com/collection/vulnerability/{{block.entity.value}}">View in SnapAttack
-          {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
-        </a>
-      {{/if}}
-    </div>
-    {{#if details.description}}
-      <div>
-        <span class="p-value p-block">{{details.description}}</span>
-      </div>
+<div class="mb-1">
+  <div class="mb-2">
+    {{#if (eq lookupType "cve")}}
+      <a class="p-link" href="https://app.snapattack.com/collection/vulnerability/{{block.entity.value}}">View in
+        SnapAttack
+        {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
+      </a>
+    {{else if (eq lookupType "threatActors")}}
+      <a class="p-link" href="https://app.snapattack.com/collection/actor/{{block.entity.value}}">View in SnapAttack
+        {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
+      </a>
+    {{else}}
+      <a class="p-link" href="https://app.snapattack.com/collection/attack/{{block.entity.value}}">View in SnapAttack
+        {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}}
+      </a>
     {{/if}}
   </div>
+  {{#if details.description}}
+    <div>
+      <span class="p-value p-block">{{details.description}}</span>
+    </div>
+  {{/if}}
+</div>
 
+<div id="snapattack-container-{{uniqueIdPrefix}}">
   {{#if details.creation}}
     <div>
       <span class="p-key">Created:</span>
@@ -34,7 +43,8 @@
   {{#if details.cisa_known_exploited_date}}
     <div>
       <span class="p-key">CISA Known Exploited Date:</span>
-      <span class="p-value">{{moment-format details.cisa_known_exploited_date 'MM/DD/YYYY HH:mm:ss' timeZone=timezone}}</span>
+      <span class="p-value">{{moment-format details.cisa_known_exploited_date 'MM/DD/YYYY HH:mm:ss'
+                                            timeZone=timezone}}</span>
     </div>
   {{/if}}
 
@@ -53,17 +63,17 @@
   {{/if}}
 
   {{#if details.first_seen}}
-   <div>
+    <div>
       <span class="p-key">First Observed:</span>
       <span class="p-value">{{moment-format details.first_seen 'MM/DD/YYYY HH:mm:ss' timeZone=timezone}}</span>
-   </div>
+    </div>
   {{/if}}
 
   {{#if details.last_seen}}
-   <div>
+    <div>
       <span class="p-key">Last Observed:</span>
       <span class="p-value">{{moment-format details.last_seen 'MM/DD/YYYY HH:mm:ss' timeZone=timezone}}</span>
-   </div>
+    </div>
   {{/if}}
 
   {{#if details.workarounds}}
@@ -76,29 +86,34 @@
   {{#if details.motivations}}
     <h1 class="p-title">{{fa-icon icon="question" fixedWidth=true}} Motivations</h1>
     {{#each details.motivations as |motive|}}
-        <span class="tag">{{motive}}</span>
+      <span class="tag">{{motive}}</span>
     {{/each}}
   {{/if}}
 
   {{#if details.resolutions}}
     <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Resolutions</h1>
     {{#each details.resolutions as |res|}}
-      <span class="tag">{{res}}</span>
+      <div class="section">{{res}}</div>
     {{/each}}
   {{/if}}
 
   {{#if details.severity}}
-   <div>
+    <div>
       <span class="p-key">Severity:</span>
       <span class="p-value">{{details.severity}}</span>
-   </div>
+    </div>
+  {{/if}}
+
+  {{#if details.type}}
+    <div>
+      <span class="p-key">Type:</span>
+      <span class="p-value">{{details.type}}</span>
+    </div>
   {{/if}}
 
   {{#if details.cvss_3_vector}}
-    <div>
-      <span class="p-key">CVSS 3 Vector:</span>
-      <span class="p-value">{{details.cvss_3_vector}}</span>
-    </div>
+    <h1 class="p-title">{{fa-icon icon="vector-square" fixedWidth=true}} CVSS 3 Vector</h1>
+    <div class="p-value">{{details.cvss_3_vector}}</div>
   {{/if}}
 
   {{#if details.cvss_3_vector_details}}
@@ -108,19 +123,22 @@
         <div class="info-bar-pill">
           <span class="info-bar-key">Base</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.base_score}}{{details.cvss_3_vector_details.base_score}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.base_score}}{{details.cvss_3_vector_details.base_score}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
         <div class="info-bar-pill">
           <span class="info-bar-key">Temporal</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.temporal_score}}{{details.cvss_3_vector_details.temporal_score}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.temporal_score}}{{details.cvss_3_vector_details.temporal_score}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
         <div class="info-bar-pill">
           <span class="info-bar-key">Environmental</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.environmental_score}}{{details.cvss_3_vector_details.environmental_score}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.environmental_score}}{{details.cvss_3_vector_details.environmental_score}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
       </div>
@@ -132,13 +150,15 @@
         <div class="info-bar-pill two-wide">
           <span class="info-bar-key">Attack Vector</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.modified_attack_vector}}{{details.cvss_3_vector_details.modified_attack_vector}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.modified_attack_vector}}{{details.cvss_3_vector_details.modified_attack_vector}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
         <div class="info-bar-pill two-wide">
           <span class="info-bar-key">Complexity</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.modified_attack_complexity}}{{details.cvss_3_vector_details.modified_attack_complexity}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.modified_attack_complexity}}{{details.cvss_3_vector_details.modified_attack_complexity}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
       </div>
@@ -146,13 +166,15 @@
         <div class="info-bar-pill two-wide">
           <span class="info-bar-key">Privileges Req'd</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.modified_privileges_required}}{{details.cvss_3_vector_details.modified_privileges_required}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.modified_privileges_required}}{{details.cvss_3_vector_details.modified_privileges_required}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
         <div class="info-bar-pill two-wide">
           <span class="info-bar-key">User Interaction</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.modified_user_interaction}}{{details.cvss_3_vector_details.modified_user_interaction}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.modified_user_interaction}}{{details.cvss_3_vector_details.modified_user_interaction}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
       </div>
@@ -164,19 +186,22 @@
         <div class="info-bar-pill">
           <span class="info-bar-key">Confidentiality</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.modified_confidentiality_impact}}{{details.cvss_3_vector_details.modified_confidentiality_impact}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.modified_confidentiality_impact}}{{details.cvss_3_vector_details.modified_confidentiality_impact}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
         <div class="info-bar-pill">
           <span class="info-bar-key">Integrity</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.modified_integrity_impact}}{{details.cvss_3_vector_details.modified_integrity_impact}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.modified_integrity_impact}}{{details.cvss_3_vector_details.modified_integrity_impact}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
         <div class="info-bar-pill">
           <span class="info-bar-key">Availability</span>
           <span class="info-bar-value">
-            {{#if details.cvss_3_vector_details.modified_availability_impact}}{{details.cvss_3_vector_details.modified_availability_impact}}{{else}}N/A{{/if}}
+            {{#if details.cvss_3_vector_details.modified_availability_impact}}{{details.cvss_3_vector_details.modified_availability_impact}}{{else}}
+              N/A{{/if}}
           </span>
         </div>
       </div>
@@ -191,24 +216,28 @@
   {{/if}}
 
   {{#if details.platforms}}
-    <h1 class="p-title">{{fa-icon icon="breifcase" fixedWidth=true}} Associated Platforms</h1>
+    <h1 class="p-title">{{fa-icon icon="briefcase" fixedWidth=true}} Associated Platforms</h1>
     {{#each details.platforms as |plat|}}
-      <span class="p-value p-block">{{plat}}</span>
+      <span class="tag">{{plat}}</span>
     {{/each}}
   {{/if}}
 
   {{#if details.parents}}
     <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Parents</h1>
-    {{#each details.parents as |parent|}}
-      <span class="tag">{{parent.external_source_id}}: {{parent.name}}</span>
-    {{/each}}
+    <div class="scrollable-container">
+      {{#each details.parents as |parent|}}
+        <span class="tag">{{parent.external_source_id}}: {{parent.name}}</span>
+      {{/each}}
+    </div>
   {{/if}}
 
   {{#if details.children}}
     <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known MITRE Attack Children</h1>
-    {{#each details.children as |child|}}
-      <span class="tag">{{child.external_source_id}}</span>
-    {{/each}}
+    <div class="scrollable-container">
+      {{#each details.children as |child|}}
+        <span class="tag">{{child.external_source_id}}</span>
+      {{/each}}
+    </div>
   {{/if}}
 
   {{#if details.aliases}}
@@ -219,12 +248,14 @@
   {{/if}}
 
   {{#if details.attacks}}
-    <h1 class="p-title">{{fa-icon icon="mace" fixedWidth=true}} Number of Associated Attack Scripts: {{details.attacks.length}}</h1>
+    <h1 class="p-title">{{fa-icon icon="mace" fixedWidth=true}} Number of Associated Attack
+      Scripts: {{details.attacks.length}}</h1>
   {{/if}}
 
 
   {{#if details.exploits}}
-    <h1 class="p-title">{{fa-icon icon="spider" fixedWidth=true}} Number of Known Exploits: {{details.exploits.length}}</h1>
+    <h1 class="p-title">{{fa-icon icon="spider" fixedWidth=true}} Number of Known
+      Exploits: {{details.exploits.length}}</h1>
   {{/if}}
 
   {{#if details.vulnerabilities}}
@@ -238,7 +269,7 @@
   {{#if details.source_regions}}
     <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Known Source Regions</h1>
     {{#each details.source_regions as |source|}}
-            <span class="tag">{{source}}</span>
+      <span class="tag">{{source}}</span>
     {{/each}}
   {{/if}}
 
@@ -258,9 +289,11 @@
 
   {{#if details.actors}}
     <h1 class="p-title">{{fa-icon icon="user-secret" fixedWidth=true}} Known Threat Actors</h1>
-    {{#each details.actors as |actor|}}
-      <span class="tag">{{actor.name}}</span>
-    {{/each}}
+    <div class="scrollable-container">
+      {{#each details.actors as |actor|}}
+        <span class="tag">{{actor.name}}</span>
+      {{/each}}
+    </div>
   {{/if}}
 
   {{#if details.vulnerable_cpes}}
@@ -285,6 +318,7 @@
   {{/if}}
 
   {{#if details.software}}
-    <div class="p-title">{{fa-icon icon="starship" fixedWidth=true}} Number of Associated Software: {{details.software.length}}</div>
+    <div class="p-title">{{fa-icon icon="starship" fixedWidth=true}} Number of Associated
+      Software: {{details.software.length}}</div>
   {{/if}}
 </div>
