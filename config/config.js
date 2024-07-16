@@ -24,7 +24,8 @@ module.exports = {
     cert: '',
     key: '',
     passphrase: '',
-    ca: ''
+    ca: '',
+    proxy: ''
   },
   logging: {
     level: 'info'
