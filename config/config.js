@@ -7,7 +7,7 @@ module.exports = {
   customTypes: [
     {
       key: 'allText',
-      regex: /\S[\s\S]{3,30}\S/
+      regex: /\b.{3,100}\b/
     }
   ],
   styles: ['./styles/styles.less'],
