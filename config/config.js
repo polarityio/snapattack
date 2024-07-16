@@ -27,7 +27,7 @@ module.exports = {
     ca: ''
   },
   logging: {
-    level: 'trace'
+    level: 'info'
   },
   options: [
     {
