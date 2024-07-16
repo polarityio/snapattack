@@ -2,7 +2,7 @@ module.exports = {
   name: 'SnapAttack',
   acronym: 'SNAP',
   onDemandOnly: true,
-  description: '',
+  description: 'Lookup information on CVEs and either tagged Threat Actor names or tagged MITRE ATT&CK techniques',
   entityTypes: ['cve'],
   customTypes: [
     {
@@ -43,20 +43,20 @@ module.exports = {
     {
       key: 'lookups',
       name: 'Data to Lookup in the SnapAttack Integration',
-      description: 'Lookup information on Vulnerabilities, Threat Actors or MITRE Attack.',
+      description: 'Lookup information on tagged Threat Actors or MITRE Attack.',
       default: {
         value: 'threatActors',
-        display: 'Lookup information on Threat Actors in SnapAttack (default)'
+        display: 'Lookup information on tagged Threat Actors in SnapAttack (default)'
       },
       type: 'select',
       options: [
         {
           value: 'threatActors',
-          display: 'Lookup information on Threat Actors in SnapAttack'
+          display: 'Lookup information on tagged Threat Actors in SnapAttack'
         },
         {
           value: 'mitre',
-          display: 'Lookup information on MITRE attack techniques in SnapAttack'
+          display: 'Lookup information on tagged MITRE attack techniques in SnapAttack'
         }
       ],
       multiple: false,
