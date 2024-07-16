@@ -19,6 +19,7 @@ A valid SnapAttack API key is required for the integration to function. To obtai
 
 The Polarity - SnapAttack integration enables analysts to specify which datasets to query for the integration. Analysts can choose to search Threat Actors (default) or Mitre Attack Techniques. The integration will search vulnerabilities by default. 
 
+**HINT** Threat actor and MITRE ATT&CK lookups require case-insensitive exact matches against specific tagged attacks or actors in SnapAttack.  For example, to lookup the technique `T1036` requires searching on the tagged string `T1036: Masquerading`. 
 
 ## Installation Instructions
 
