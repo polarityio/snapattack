@@ -1,0 +1,51 @@
+{
+  "root": {
+    "path": "",
+    "on_null": "return_empty"
+  },
+  "pipeline": [
+    {
+      "op": "copy",
+      "from": "data.description",
+      "to": "reduced_results.description"
+    },
+    {
+      "op": "copy",
+      "from": "data.severity",
+      "to": "reduced_results.severity"
+    },
+    {
+      "op": "copy",
+      "from": "data.epss_score",
+      "to": "reduced_results.epss_score"
+    },
+    {
+      "op": "copy",
+      "from": "data.cisa_known_exploited_date",
+      "to": "reduced_results.cisa_known_exploited_date"
+    },
+    {
+      "op": "copy",
+      "from": "data.first_seen",
+      "to": "reduced_results.first_seen"
+    },
+    {
+      "op": "copy",
+      "from": "data.workarounds",
+      "to": "reduced_results.workarounds"
+    },
+    {
+      "op": "copy",
+      "from": "data.available_mitigation",
+      "to": "reduced_results.available_mitigation"
+    },
+    {
+      "op": "prune",
+      "strategy": "empty_values",
+      "target": "reduced_results"
+    }
+  ],
+  "output": {
+    "result": "$working.reduced_results"
+  }
+}
